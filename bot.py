@@ -53,7 +53,7 @@ async def services(event: Union[types.Message, types.CallbackQuery], init_messag
 	message = await event_process(event)
 
 	inline_keyboard_markup = types.InlineKeyboardMarkup(inline_keyboard=[
-		[types.InlineKeyboardButton("Записаться", web_app=types.WebAppInfo(url='https://127.0.0.1/liot/make_order'))],
+		[types.InlineKeyboardButton("Записаться", web_app=types.WebAppInfo(url='https://fruitourist.ru/liot/make_order'))],
 		[types.InlineKeyboardButton("« Меню", callback_data='menu')]
 	])
 
