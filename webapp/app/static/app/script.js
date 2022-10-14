@@ -1,10 +1,12 @@
 /* Cart Vars */
+
 var selectedServicesIndexes = new Array();
 var selectedDateIndex = null;
 var selectedTimeIndex = null;
 
 
 /* Telegram Vars */
+
 var MainButton = window.Telegram.WebApp.MainButton;
 var BackButton = window.Telegram.WebApp.BackButton;
 MainButton.hide();
@@ -24,7 +26,7 @@ function loadSelectServices() {
 }
 
 function loadSelectDateAndTime() {
-	MainButton.setText("ЗАКАЗАТЬ");
+	MainButton.setText("ЗАПИСАТЬСЯ");
 	$('#select_services').hide();
 	$('#select_date_and_time-times').hide();
 	loadDates();
