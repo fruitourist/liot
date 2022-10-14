@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<script src="https://telegram.org/js/telegram-web-app.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+	<script type="text/javascript">
+		
+		//self-generated
+		
+		var services = [
+			{'title': "Мужская стрижка", 'price': 1000},
+			{'title': "Стрижка бороды", 'price': 500},
+			{'title': "Ваксинг (нос/уши/щеки)", 'price': 300}
+		];
+
+		var dates = new Array();
+		let date = new Date();
+		for (let i = 0; i < 7; i++) {
+			dates.push(structuredClone(date));
+			date.setDate(date.getDate() + 1);
+		}
+
+		var times = new Array();
+		for (let i = 0; i < dates.length; i++) {
+			let subTimes = new Array();
+			//
+			let subTime = new Date((11 + date.getTimezoneOffset() / 60)*3600*1000);
+			for (let j = 0; j < 10; j++) {
+				subTimes.push(structuredClone(subTime));
+				subTime.setTime(subTime.getTime() + 1*3600*1000);
+			}
+			//
+			times.push(subTimes);
+		}
+	</script>
+</head>
+<body>
+	<div id="select_services">
+		<p>Выберите услуги</p>
+		<!--self-generated-->
+		<input class="select_service" type="checkbox" name="select_service" data-service_index="0">Мужская стрижка · 1000 ₽<br>
+		<input class="select_service" type="checkbox" name="select_service" data-service_index="1">Стрижка бороды · 500 ₽<br>
+		<input class="select_service" type="checkbox" name="select_service" data-service_index="2">Ваксинг (нос/уши/щеки) · 300 ₽<br>
+	</div>
+	<div id="select_date_and_time" style="display: none;">
+		<p>Выберите дату и время</p>
+		<div id="select_date_and_time-dates">
+			<!-- generated -->
+		</div>
+		<hr>
+		<div id="select_date_and_time-times" style="display: none;">
+			<!-- generated -->
+		</div>
+	</div>
+	<script src="https://127.0.0.1/liot/make_order/static/script.js"></script>
+</body>
+</html>
