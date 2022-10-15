@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+body {
+	margin: 0;
+
+	font-family: 'Inter', sans-serif;
+	color: var(--tg-theme-text-color);
+
+	background-color: var(--tg-theme-secondary-bg-color);
+}
+
+hr {
+	border: 1px dashed var(--tg-theme-hint-color);;
+}
+
+
+.header_big {
+	font-size: 24px;
+	font-weight: 600;
+}
+
+
+#main {
+	margin: 20px;
+}
+
+#select_services {
+	display: grid;
+	grid-gap: 10px;
+}
+
+#select_services .header_big {
+	margin-bottom: 10px;
+}
+
+.select_service {
+	width: 100%;
+	height: 100px;
+
+	border-radius: 20px;
+
+	display: grid;
+	grid-template-columns: 70% 30%;
+
+	font-size: 20px;
+	font-weight: 400;
+
+	background-color: var(--tg-theme-bg-color);
+}
+
+.select_service-title {
+	padding-left: 20px;
+
+	display: flex;
+	align-items: center;
+}
+
+.select_service-price {
+	padding-right: 20px;
+
+	display: flex;
+	align-items: center;
+	justify-content: right;
+}
+
+.select_service-selected {
+	background-color: var(--tg-theme-button-color);
+	color: var(--tg-theme-button-text-color);
+}
+
+
+#select_date_and_time-dates {
+	margin-bottom: 20px;
+
+	display: grid;
+	grid-gap: 10px;
+	grid-template-columns: calc(33% - 10px * 2 / 3) calc(33% - 10px * 2 / 3) calc(33% - 10px * 2 / 3);
+}
+
+#select_date_and_time .header_big {
+	margin-bottom: 20px;
+}
+
+.select_date {
+	width: 100%;
+	height: 40px;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	border-radius: 20px;
+
+	background-color: var(--tg-theme-bg-color);
+}
+
+.select_date-selected {
+	color: var(--tg-theme-button-text-color);
+	background-color: var(--tg-theme-button-color);
+}
+
+
+#select_date_and_time-times {
+	margin-top: 20px;
+	margin-bottom: 20px;
+
+	display: grid;
+	grid-gap: 10px;
+	grid-template-columns: calc(33% - 10px * 2 / 3) calc(33% - 10px * 2 / 3) calc(33% - 10px * 2 / 3);
+}
+
+.select_time {
+	width: 100%;
+	height: 40px;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	border-radius: 20px;
+
+	background-color: var(--tg-theme-bg-color);
+}
+
+.select_time-selected {
+	color: var(--tg-theme-button-text-color);
+	background-color: var(--tg-theme-button-color);
+}

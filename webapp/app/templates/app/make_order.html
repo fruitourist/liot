@@ -4,9 +4,11 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title></title>
+	<link rel="stylesheet" type="text/css" href="/liot/make_order/static/stylesheet.css">
 	<script src="https://telegram.org/js/telegram-web-app.js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 	<script type="text/javascript">
+		var initMessageId = {{ init_message_id }};
 		
 		//self-generated
 		
@@ -38,23 +40,34 @@
 	</script>
 </head>
 <body>
-	<div id="select_services">
-		<p>Выберите услуги</p>
-		<!--self-generated-->
-		<input class="select_service" type="checkbox" name="select_service" data-service_index="0">Мужская стрижка · 1000 ₽<br>
-		<input class="select_service" type="checkbox" name="select_service" data-service_index="1">Стрижка бороды · 500 ₽<br>
-		<input class="select_service" type="checkbox" name="select_service" data-service_index="2">Ваксинг (нос/уши/щеки) · 300 ₽<br>
-	</div>
-	<div id="select_date_and_time" style="display: none;">
-		<p>Выберите дату и время</p>
-		<div id="select_date_and_time-dates">
-			<!-- generated -->
+	<div id="main">
+		<div id="select_services">
+			<div class="header_big">Выберите услуги</div>
+			<!--self-generated-->
+			<div class="select_service" data-service_index="0">
+				<div class="select_service-title">Мужская стрижка</div>
+				<div class="select_service-price">1000 ₽</div>
+			</div>
+			<div class="select_service" data-service_index="1">
+				<div class="select_service-title">Оформление бороды</div>
+				<div class="select_service-price">500 ₽</div>
+			</div>
+			<div class="select_service" data-service_index="2">
+				<div class="select_service-title">Ваксинг (нос/уши/щеки)</div>
+				<div class="select_service-price">300 ₽</div>
+			</div>
 		</div>
-		<hr>
-		<div id="select_date_and_time-times" style="display: none;">
-			<!-- generated -->
+		<div id="select_date_and_time" style="display: none;">
+			<div class="header_big">Выберите дату и время</div>
+			<div id="select_date_and_time-dates">
+				<!-- generated -->
+			</div>
+			<hr>
+			<div id="select_date_and_time-times" style="display: none;">
+				<!-- generated -->
+			</div>
 		</div>
 	</div>
-	<script src="https://127.0.0.1/liot/make_order/static/script.js"></script>
+	<script src="/liot/make_order/static/script.js"></script>
 </body>
 </html>
