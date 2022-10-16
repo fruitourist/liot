@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-y@3%+5wy&-*rineow#kaa(#iy7o*_#e!q4)akf971zfagu08@0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['fruitourist.ru', 'www.fruitourist.ru']
 
 
 # Application definition
@@ -55,7 +55,7 @@ ROOT_URLCONF = 'webapp.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['app/templates'],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -9,7 +9,7 @@ from ownsecrets import BOT_TOKEN, PROVIDER_TOKEN
 
 def make_order(request):
 	return render(request,
-		'app/make_order.html',
+		'make_order.html',
 		context={'init_message_id': request.GET['init_message_id']}
 	)
 
