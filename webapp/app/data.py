@@ -26,11 +26,11 @@ def get_free_times(date_isoformat: datetime.date.isoformat) -> List[datetime.tim
 	free_times = list()
 
 	hour_start = 11
+	hour_end = 21
 	if date_isoformat == datetime.date.today().isoformat():
 		hour_now = datetime.datetime.now().hour
 		hour_start = hour_now if hour_now < hour_end - 1 and hour_now >= hour_start else hour_end 
 
-	hour_end = 21
 	for h in range(hour_start, hour_end):
 		time_isoformat = datetime.time(h).isoformat()
 		if not Appointment.objects.filter(date=date_isoformat, time=time_isoformat).exists():
