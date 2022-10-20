@@ -1,0 +1,1 @@
+WEBAPP_URL = 'https://fruitourist.ru/liot'

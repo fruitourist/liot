@@ -1,14 +1,15 @@
 /* Cart Vars */
 
 var selectedServicesIndexes = new Array();
-var selectedDateIndex = null;
-var selectedTimeIndex = null;
+var selectedDateIsoformat = null;
+var selectedTimeIsoformat = null;
 
 
 /* Telegram Vars */
 
-var MainButton = window.Telegram.WebApp.MainButton;
-var BackButton = window.Telegram.WebApp.BackButton;
+var WebApp = window.Telegram.WebApp;
+var MainButton = WebApp.MainButton;
+var BackButton = WebApp.BackButton;
 MainButton.hide();
 BackButton.hide();
 MainButton.setText("ВЫБРАТЬ ДАТУ И ВРЕМЯ");
@@ -61,40 +62,72 @@ $('.select_service').click(function() {
 
 /* select_date_and_time */
 
+let months = [
+	"Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
+]
+
+function stylizeTime(timeIsoformat) {
+	return timeIsoformat.slice(0, 5);
+}
+
+function stylizeDate(dateIsoformat) {
+	let monthInt = parseInt(dateIsoformat.slice(5, 6 + 1));
+	let day = parseInt(dateIsoformat.slice(8, 9 + 1));
+
+	let today = new Date();
+	if (today.toISOString().slice(0, 9 + 1) == dateIsoformat) {
+		return "Сегодня";
+	} else {
+		today.setDate(today.getDate() + 1);
+		if (today.toISOString().slice(0, 9 + 1) == dateIsoformat) {
+			return "Завтра";
+		} else {
+			return `${months[monthInt - 1]}, ${day}`;
+		}
+	}
+}
+
+
 function loadDates() {
 	$('#select_date_and_time-dates').empty();
+	selectedDateIsoformat = null;
 	
-	for (let i = 0; i < window.dates.length; i++) {
+	for (let dateIsoformat in window.freeDates) {
 		let div = document.createElement('div');
 		div.classList.add('select_date');
+		div.setAttribute('data-date_isoformat', dateIsoformat);
 		div.onclick = function() {
-			if (selectedDateIndex != null) {
-				$('.select_date')[selectedDateIndex].classList.remove('select_date-selected');
+			if (selectedDateIsoformat != null) {
+				$(`.select_date[data-date_isoformat='${selectedDateIsoformat}']`).removeClass('select_date-selected');
 			}
 			$(this).addClass('select_date-selected');
-			selectedDateIndex = i;
-			loadTimes(i);
+			selectedDateIsoformat = dateIsoformat;
+			loadTimes(dateIsoformat);
 		};
-		div.textContent = window.dates[i].toLocaleDateString('ru-RU', {'day': '2-digit', 'month': '2-digit'});
+		div.textContent = stylizeDate(dateIsoformat);
 
 		$('#select_date_and_time-dates').append(div);
 	}
 }
 
-function loadTimes(selectedDateIndex) {
+function loadTimes(selectedDateIsoformat) {
 	$('#select_date_and_time-times').empty();
+	selectedTimeIsoformat = null;
 	
-	for (let i = 0; i < window.times[selectedDateIndex].length; i++) {
+	for (let i in window.freeDates[selectedDateIsoformat]) {
+		let timeIsoformat = window.freeDates[selectedDateIsoformat][i];
+		
 		let div = document.createElement('div');
 		div.classList.add('select_time');
+		div.setAttribute('data-time_isoformat', timeIsoformat)
 		div.onclick = function() {
-			if (selectedTimeIndex != null) {
-				$('.select_time')[selectedTimeIndex].classList.remove('select_time-selected');
+			if (selectedTimeIsoformat != null) {
+				$(`.select_time[data-time_isoformat='${selectedTimeIsoformat}']`).removeClass('select_time-selected');
 			}
 			$(this).addClass('select_time-selected');
-			selectedTimeIndex = i;
+			selectedTimeIsoformat = timeIsoformat;
 		};
-		div.textContent = window.times[selectedDateIndex][i].toLocaleTimeString('ru-RU', {'hour': '2-digit', 'minute': '2-digit'});
+		div.textContent = stylizeTime(timeIsoformat);
 
 		$('#select_date_and_time-times').append(div);
 	}
@@ -113,28 +146,28 @@ MainButton.onClick(function() {
 		}
 	} else if (currentSection == 'select_date_and_time') {
 
+		if (!selectedDateIsoformat || !selectedTimeIsoformat) {
+			WebApp.showAlert("Выберите дату и время для записи");
+			return null;
+		}
+
+		let selectedServicesIds = new Array();
 		let prices = new Array();
 		for (let selectedServiceIndex of selectedServicesIndexes) {
+			selectedServicesIds.push(window.services[selectedServiceIndex].pk);
 			prices.push({
-				'label': window.services[selectedServiceIndex].title,
-				'amount': window.services[selectedServiceIndex].price * 100
+				'label': window.services[selectedServiceIndex].fields.title,
+				'amount': window.services[selectedServiceIndex].fields.price * 100
 			})
 		}
-
-		let selectedDateString = $('.select_date')[selectedDateIndex].textContent;
-		let selectedTimeString = $('.select_time')[selectedTimeIndex].textContent;
 
 		let requestParams = {
-			'description': `Стрижка для тебя на ${selectedDateString} в ${selectedTimeString}`,
+			'description': `Стрижка для тебя на ${stylizeDate(selectedDateIsoformat)} в ${stylizeTime(selectedTimeIsoformat)}`,
 			'prices': JSON.stringify(prices),
-			'payload': JSON.stringify({
-				'init_message_id': initMessageId,
-				'selected_date_string': selectedDateString,
-				'selected_time_string': selectedTimeString,
-			})
+			'payload': `${userId} ${initMessageId} ${JSON.stringify(selectedServicesIds)} ${selectedDateIsoformat} ${selectedTimeIsoformat}`,
 		}
 
-		let requestURL = new URL(`https://fruitourist.ru/liot/make_order/create_invoice_link`);
+		let requestURL = new URL(`${window.location.origin}/liot/make_order/create_invoice_link`);
 		requestURL.searchParams.set('description', requestParams['description']);
 		requestURL.searchParams.set('prices', requestParams['prices']);
 		requestURL.searchParams.set('payload', requestParams['payload']);

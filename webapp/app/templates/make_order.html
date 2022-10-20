@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,53 +8,26 @@
 	<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 	<script type="text/javascript">
 		var initMessageId = {{ init_message_id }};
-		
-		//self-generated
-		
-		var services = [
-			{'title': "Мужская стрижка", 'price': 1000},
-			{'title': "Стрижка бороды", 'price': 500},
-			{'title': "Ваксинг (нос/уши/щеки)", 'price': 300}
-		];
+		var services = JSON.parse('{{ services_json|escapejs }}');
 
-		var dates = new Array();
-		let date = new Date();
-		for (let i = 0; i < 7; i++) {
-			dates.push(structuredClone(date));
-			date.setDate(date.getDate() + 1);
-		}
+		var freeDates;
+		$.getJSON(`${window.location.origin}/liot/get_free_dates`, function(data) {
+			freeDates = data.free_dates;
+		});
 
-		var times = new Array();
-		for (let i = 0; i < dates.length; i++) {
-			let subTimes = new Array();
-			//
-			let subTime = new Date((11 + date.getTimezoneOffset() / 60)*3600*1000);
-			for (let j = 0; j < 10; j++) {
-				subTimes.push(structuredClone(subTime));
-				subTime.setTime(subTime.getTime() + 1*3600*1000);
-			}
-			//
-			times.push(subTimes);
-		}
+		var userId = JSON.parse(new URLSearchParams(window.Telegram.WebApp.initData).get('user')).id;
 	</script>
 </head>
 <body>
 	<div id="main">
 		<div id="select_services">
 			<div class="header_big">Выберите услуги</div>
-			<!--self-generated-->
-			<div class="select_service" data-service_index="0">
-				<div class="select_service-title">Мужская стрижка</div>
-				<div class="select_service-price">1000 ₽</div>
+			{% for service in services %}
+			<div class="select_service" data-service_index="{{ forloop.counter0 }}">
+				<div class="select_service-title">{{ service.title }}</div>
+				<div class="select_service-price">{{ service.price }} ₽</div>
 			</div>
-			<div class="select_service" data-service_index="1">
-				<div class="select_service-title">Оформление бороды</div>
-				<div class="select_service-price">500 ₽</div>
-			</div>
-			<div class="select_service" data-service_index="2">
-				<div class="select_service-title">Ваксинг (нос/уши/щеки)</div>
-				<div class="select_service-price">300 ₽</div>
-			</div>
+			{% endfor %}
 		</div>
 		<div id="select_date_and_time" style="display: none;">
 			<div class="header_big">Выберите дату и время</div>
