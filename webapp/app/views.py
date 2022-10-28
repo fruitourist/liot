@@ -6,12 +6,17 @@ import json
 
 # from local dir
 from ownsecrets import BOT_TOKEN, PROVIDER_TOKEN
+from security import is_valid_data
 from app import data
 
 
 def make_order(request):
 
-    init_message_id = request.GET['init_message_id']
+    init_message_id = int(request.GET['init_message_id'])
+    
+    if not init_message_id:
+        return HttpResponse("Bad Request", status=400)
+
 
     services, services_json = data.get_services_with_json()
 
@@ -35,18 +40,39 @@ def get_free_dates(request):
 
 def get_active_appointments(request):
 
-    user_id = request.GET['user_id']
+    bot_token = request.GET['bot_token']
+    
+    if bot_token != BOT_TOKEN:
+        return HttpResponse("Forbidden", status=403)
+
+
+    user_id = int(request.GET['user_id'])
+
+    if not user_id:
+        return HttpResponse("Bad Request", status=400)
+
 
     return JsonResponse({
-        'active_appointments': data.get_active_appointments(int(user_id))
+        'active_appointments': data.get_active_appointments(user_id)
     })
 
 
 def create_invoice_link(request):
 
+    init_data_hash = request.GET['initDataHash']
+    data_check_string = request.GET['dataCheckString']
+    
+    if not is_valid_data(init_data_hash, data_check_string):
+        return HttpResponse("Unauthorized", status=401)
+
+
     description = request.GET['description']
     payload = request.GET['payload']
     prices = request.GET['prices']
+
+    if not description or not payload or not prices:
+        return HttpResponse("Bad Request", status=400)
+
     
     response = requests.get(f'https://api.telegram.org/bot{BOT_TOKEN}/createInvoiceLink', {
         'title': "Запись",
@@ -66,11 +92,21 @@ def create_invoice_link(request):
 
 def make_appointment(request):
 
-    user_id = request.GET['user_id']
-    services_ids = request.GET['services_ids']
+    bot_token = request.GET['bot_token']
+    
+    if bot_token != BOT_TOKEN:
+        return HttpResponse("Forbidden", status=403)
+
+
+    user_id = int(request.GET['user_id'])
+    services_ids = json.loads(request.GET['services_ids'])
     date_isoformat = request.GET['date_isoformat']
     time_isoformat = request.GET['time_isoformat']
 
-    data.make_appointment(int(user_id), json.loads(services_ids), date_isoformat, time_isoformat)
+    if not user_id or not services_ids or not date_isoformat or not time_isoformat:
+        return HttpResponse("Bad Request", status=400)
 
-    return HttpResponse('')
+
+    data.make_appointment(user_id, services_ids, date_isoformat, time_isoformat)
+
+    return HttpResponse("OK", status=200)

@@ -164,13 +164,18 @@ MainButton.onClick(function() {
 		let requestParams = {
 			'description': `Стрижка для тебя на ${stylizeDate(selectedDateIsoformat)} в ${stylizeTime(selectedTimeIsoformat)}`,
 			'prices': JSON.stringify(prices),
-			'payload': `${userId} ${initMessageId} ${JSON.stringify(selectedServicesIds)} ${selectedDateIsoformat} ${selectedTimeIsoformat}`,
+			'payload': `${window.userId} ${window.initMessageId} ${JSON.stringify(selectedServicesIds)} ${selectedDateIsoformat} ${selectedTimeIsoformat}`,
+
+			'initDataHash': initDataHash,
+			'dataCheckString': dataCheckString,
 		}
 
 		let requestURL = new URL(`${window.location.origin}/liot/create_invoice_link`);
 		requestURL.searchParams.set('description', requestParams['description']);
 		requestURL.searchParams.set('prices', requestParams['prices']);
 		requestURL.searchParams.set('payload', requestParams['payload']);
+		requestURL.searchParams.set('initDataHash', requestParams['initDataHash']);
+		requestURL.searchParams.set('dataCheckString', requestParams['dataCheckString']);
 
 		let xhr = new XMLHttpRequest();
 		xhr.open('GET', requestURL);

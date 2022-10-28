@@ -99,11 +99,12 @@ async def successful_payment(message: types.Message):
     user_id, init_message_id = int(user_id), int(init_message_id)
 
     requests.get(f'{WEBAPP_URL}/make_appointment', {
+        'bot_token': BOT_TOKEN,
         'user_id': user_id,
         'services_ids': services_ids,
         'date_isoformat': date_isoformat,
-        'time_isoformat': time_isoformat
-    })
+        'time_isoformat': time_isoformat,
+    }, verify=False)
 
     await bot.delete_message(
         chat_id=message.chat.id,
@@ -187,8 +188,9 @@ async def active(event: Union[types.Message, types.CallbackQuery], active_appoin
     message, user_id = await process_event(event, with_user_id=True)
 
     response = requests.get(f'{WEBAPP_URL}/get_active_appointments', {
+        'bot_token': BOT_TOKEN,
         'user_id': user_id
-    })
+    }, verify=False)
 
     active_appointments = response.json()['active_appointments']
 

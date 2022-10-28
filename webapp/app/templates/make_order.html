@@ -10,12 +10,19 @@
 		var initMessageId = {{ init_message_id }};
 		var services = JSON.parse('{{ services_json|escapejs }}');
 
+		var userId = JSON.parse(new URLSearchParams(window.Telegram.WebApp.initData).get('user')).id;
+
+		let initData = new URLSearchParams(window.Telegram.WebApp.initData);
+		var initDataHash = initData.get('hash');
+
+		initData.delete('hash');
+		initData.sort();
+		var dataCheckString = initData.toString();
+
 		var freeDates;
 		$.getJSON(`${window.location.origin}/liot/get_free_dates`, function(data) {
 			freeDates = data.free_dates;
 		});
-
-		var userId = JSON.parse(new URLSearchParams(window.Telegram.WebApp.initData).get('user')).id;
 	</script>
 </head>
 <body>
