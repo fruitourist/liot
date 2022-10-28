@@ -104,7 +104,7 @@ async def successful_payment(message: types.Message):
         'services_ids': services_ids,
         'date_isoformat': date_isoformat,
         'time_isoformat': time_isoformat,
-    }, verify=False)
+    })
 
     await bot.delete_message(
         chat_id=message.chat.id,
@@ -190,7 +190,7 @@ async def active(event: Union[types.Message, types.CallbackQuery], active_appoin
     response = requests.get(f'{WEBAPP_URL}/get_active_appointments', {
         'bot_token': BOT_TOKEN,
         'user_id': user_id
-    }, verify=False)
+    })
 
     active_appointments = response.json()['active_appointments']
 
