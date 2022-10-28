@@ -167,7 +167,7 @@ MainButton.onClick(function() {
 			'payload': `${userId} ${initMessageId} ${JSON.stringify(selectedServicesIds)} ${selectedDateIsoformat} ${selectedTimeIsoformat}`,
 		}
 
-		let requestURL = new URL(`${window.location.origin}/liot/make_order/create_invoice_link`);
+		let requestURL = new URL(`${window.location.origin}/liot/create_invoice_link`);
 		requestURL.searchParams.set('description', requestParams['description']);
 		requestURL.searchParams.set('prices', requestParams['prices']);
 		requestURL.searchParams.set('payload', requestParams['payload']);

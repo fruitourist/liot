@@ -9,6 +9,6 @@ class Service(models.Model):
 
 class Appointment(models.Model):
 	user_id = models.IntegerField()
-	services = ArrayField(models.IntegerField())
+	services_ids = ArrayField(models.IntegerField())
 	date = models.DateField()
 	time = models.TimeField()

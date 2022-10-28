@@ -1,9 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 
-from app.models import Service
-from django.core import serializers
-
 import requests
 import json
 
@@ -14,53 +11,66 @@ from app import data
 
 def make_order(request):
 
-        services = Service.objects.all()
-        services_json = serializers.serialize('json', services)
+    init_message_id = request.GET['init_message_id']
 
-        return render(request,
-                'make_order.html',
-                context={
-                        'init_message_id': request.GET['init_message_id'],
-                        'services': services, 'services_json': services_json
-                }
-        )
+    services, services_json = data.get_services_with_json()
 
-
-def create_invoice_link(request):
-        
-        response = requests.get(f'https://api.telegram.org/bot{BOT_TOKEN}/createInvoiceLink',
-                {'title': "Запись",
-                 'description': request.GET['description'],
-                 'payload': request.GET['payload'],
-                 'provider_token': PROVIDER_TOKEN,
-                 'currency': 'RUB',
-                 'prices': request.GET['prices'],
-                 'photo_url': 'https://user-images.githubusercontent.com/70770455/195734898-ac0a1171-be48-4773-b382-7f6430df9744.png',
-                 'need_name': True,
-                 'need_phone_number': True}
-        )
-
-        return HttpResponse(response.text)
+    return render(request,
+        'make_order.html',
+        context={
+            'init_message_id': init_message_id,
+            'services': services, 'services_json': services_json
+        }
+    )
 
 
 def get_free_dates(request):
 
-        free_dates = data.get_free_dates()
+    free_dates = data.get_free_dates()
 
-        return JsonResponse({
-                'free_dates': free_dates
-        })
-
-
-def make_appointment(request):
-
-        data.make_appointment(request.GET['user_id'], json.loads(request.GET['services_ids']), request.GET['date_isoformat'], request.GET['time_isoformat'])
-
-        return HttpResponse('')
+    return JsonResponse({
+        'free_dates': free_dates
+    })
 
 
 def get_active_appointments(request):
 
-        return JsonResponse({
-                'active_appointments': data.get_active_appointments(request.GET['user_id'])
-        })
+    user_id = request.GET['user_id']
+
+    return JsonResponse({
+        'active_appointments': data.get_active_appointments(int(user_id))
+    })
+
+
+def create_invoice_link(request):
+
+    description = request.GET['description']
+    payload = request.GET['payload']
+    prices = request.GET['prices']
+    
+    response = requests.get(f'https://api.telegram.org/bot{BOT_TOKEN}/createInvoiceLink', {
+        'title': "Запись",
+        'description': description,
+        'payload': payload,
+        'provider_token': PROVIDER_TOKEN,
+        'currency': 'RUB',
+        'prices': prices,
+        'photo_url': 'https://user-images.githubusercontent.com/70770455/195734898-ac0a1171-be48-4773-b382-7f6430df9744.png',
+        'need_name': True,
+        'need_phone_number': True
+        }
+    )
+
+    return HttpResponse(response.text)
+
+
+def make_appointment(request):
+
+    user_id = request.GET['user_id']
+    services_ids = request.GET['services_ids']
+    date_isoformat = request.GET['date_isoformat']
+    time_isoformat = request.GET['time_isoformat']
+
+    data.make_appointment(int(user_id), json.loads(services_ids), date_isoformat, time_isoformat)
+
+    return HttpResponse('')
