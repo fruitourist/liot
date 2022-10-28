@@ -10,11 +10,11 @@ secret_key = hmac.new(b'WebAppData', bytes(BOT_TOKEN, encoding='utf-8'), sha256)
 
 def is_valid_data(init_data_hash: str, data_check_string: str) -> bool:
 
-	data_check_string_unquote = unquote(data_check_string)
+    data_check_string_unquote = unquote(data_check_string)
 
-	hash = hmac.new(secret_key, bytes(data_check_string_unquote, encoding='utf-8'), sha256).hexdigest()
+    hash = hmac.new(secret_key, bytes(data_check_string_unquote, encoding='utf-8'), sha256).hexdigest()
 
-	if hash == init_data_hash:
-		return True
-	else:
-		return False
+    if hash == init_data_hash:
+        return True
+    else:
+        return False
