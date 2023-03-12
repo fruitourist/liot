@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/?.?/ref/settings/
 from pathlib import Path
 
 # from local dir
-from ownsecrets import DATABASE_ENGINE, DATABASE_NAME, DATABASE_USER, DATABASE_PASSWORD, DATABASE_HOST, DATABASE_PORT
+from ownsecrets import DJANGO_SECRET_KEY, DATABASE_ENGINE, DATABASE_NAME, DATABASE_USER, DATABASE_PASSWORD, DATABASE_HOST, DATABASE_PORT
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -24,12 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/?.?/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-y@3%+5wy&-*rineow#kaa(#iy7o*_#e!q4)akf971zfagu08@0'
+SECRET_KEY = DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['fruitourist.ru', 'www.fruitourist.ru']
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
